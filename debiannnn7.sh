@@ -139,11 +139,11 @@ apt-get install neofetch
 apt-get -y install nginx php5-fpm php5-cli libexpat1-dev libxml-parser-perl
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf $source/For8_9/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/nginx.conf"
 mkdir -p /home/vps/public_html
 echo "<pre>Setup by OrangKuatsabahanterkini | telegram @OrangKuatsabahanterkin</pre>" > /home/vps/public_html/index.php
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
-wget -O /etc/nginx/conf.d/vps.conf $source/For8_9/vps.conf
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
 cd
 # openvpn
