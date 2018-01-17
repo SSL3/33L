@@ -26,7 +26,25 @@ fi
 
 # go to root
 cd
+# go home
+cd
+ red='\e[1;31m'
+               green='\e[0;32m'
+               NC='\e[0m'
 
+               echo -e "\e[38;5;82m Connecting to Autoscript OrangKuatsab..."
+			   sleep 1
+
+			   echo -e "\e[38;5;11m Connecting to your ip ▒▒▒▒: $myip ...."
+               sleep 2
+                          echo -e "\e[38;5;13m Proses ini akan mengambil masa 10-15 minit▒▒▒▒▒▒▒"
+		sleep 2.5	  
+			   echo -e "\e[38;5;226m IP ANDA Berjaya Di Daftarkan▒▒▒▒▒▒▒▒..."
+               sleep 1.5
+               
+			   echo -e "${green}Mula Setup▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒${NC}"
+               sleep 1
+	       cd
 # disable ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
