@@ -15,15 +15,6 @@ if [[ $ether = "" ]]; then
         ether=eth0
 fi
 
-#vps="zvur";
-vps="aneka";
-
-if [[ $vps = "zvur" ]]; then
-	source="https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9"
-else
-	source="https://raw.githubusercontent.com/EraHitam/F3Luxo/master"
-fi
-
 # go to root
 cd
 # go home
@@ -135,29 +126,30 @@ curl -L "https://bintray.com/user/downloadSubjectPublicKey?username=bintray" -o 
 apt-get update
 apt-get install neofetch
 
-# nginx
-apt-get -y install nginx php5-fpm php5-cli libexpat1-dev libxml-parser-perl
+# install webserver
+cd
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/nginx.conf"
 mkdir -p /home/vps/public_html
-echo "<pre>Setup by OrangKuatsabahanterkini | telegram @OrangKuatsabahanterkin</pre>" > /home/vps/public_html/index.php
-echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
+echo "<pre>Welcome webserver MBAH SHONDONG Hawok Hawok Jozz</pre>" > /home/vps/public_html/index.html
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
-cd
+service php5-fpm restart
+service nginx restart
+
 # openvpn
 apt-get -y install openvpn
 cd /etc/openvpn/
-wget $source/For8_9/openvpn.tar;tar xf openvpn.tar;rm openvpn.tar
-wget -O /etc/iptables.up.rules $source/For8_9/iptables.up.rules
+wget https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/openvpn.tar;tar xf openvpn.tar;rm openvpn.tar
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i "s/ipserver/$myip/g" /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
 # etc
-wget -O /home/vps/public_html/client.ovpn $source/For8_9/client.ovpn
+wget -O /home/vps/public_html/client.ovpn "https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/client.ovpn"
 sed -i "s/ipserver/$myip/g" /home/vps/public_html/client.ovpn
-cd;wget $source/For8_9/cronjob.tar
+cd;wget https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/cronjob.tar
 tar xf cronjob.tar;mv uptime.php /home/vps/public_html/
 mv usertol userssh uservpn /usr/bin/;mv cronvpn cronssh /etc/cron.d/
 chmod +x /usr/bin/usertol;chmod +x /usr/bin/userssh;chmod +x /usr/bin/uservpn;
