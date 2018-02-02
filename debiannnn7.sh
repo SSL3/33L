@@ -130,10 +130,10 @@ apt-get install neofetch
 cd
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/SSL3/FluxoScript/master/nginx.conf"
 mkdir -p /home/vps/public_html
 echo "<pre>Welcome webserver MBAH SHONDONG Hawok Hawok Jozz</pre>" > /home/vps/public_html/index.html
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/mappakkoe09/debian/master/conf/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/SSL3/FluxoScript/master/vps.conf"
 sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5/fpm/pool.d/www.conf
 service php5-fpm restart
 service nginx restart
@@ -141,13 +141,13 @@ service nginx restart
 # openvpn
 apt-get -y install openvpn
 cd /etc/openvpn/
-wget https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/openvpn.tar;tar xf openvpn.tar;rm openvpn.tar
-wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/iptables.up.rules"
+wget https://raw.githubusercontent.com/SSL3/FluxoScript/master/openvpn.tar;tar xf openvpn.tar;rm openvpn.tar
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/SSL3/FluxoScript/master/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i "s/ipserver/$myip/g" /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
 # etc
-wget -O /home/vps/public_html/client.ovpn "https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/client.ovpn"
+wget -O /home/vps/public_html/client.ovpn "https://raw.githubusercontent.com/SSL3/FluxoScript/master/client.ovpn"
 sed -i "s/ipserver/$myip/g" /home/vps/public_html/client.ovpn
 cd;wget https://raw.githubusercontent.com/EraHitam/F3Luxo/master/For8_9/cronjob.tar
 tar xf cronjob.tar;mv uptime.php /home/vps/public_html/
@@ -161,9 +161,9 @@ clear
 
 cd
 # install badvpn
-wget -O /usr/bin/badvpn-udpgw "https://github.com/Mbah-Shondong/Debian732/raw/master/Debian7/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/SSL3/FluxoScript/master/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://github.com/Mbah-Shondong/Debian732/raw/master/Debian7/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/SSL3/FluxoScript/master/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 chmod +x /usr/bin/badvpn-udpgw
@@ -212,11 +212,11 @@ tar xf vnstat_php_frontend-1.5.1.tar.gz
 rm vnstat_php_frontend-1.5.1.tar.gz
 mv vnstat_php_frontend-1.5.1 vnstat
 cd vnstat
-sed -i "s/eth0/$ether/g" config.php
-sed -i "s/\$iface_list = array('venet0', 'sixxs');/\$iface_list = array($ether);/g" config.php
+sed -i "s/\$iface_list = array('eth0', 'sixxs');/\$iface_list = array('eth0');/g" config.php
 sed -i "s/\$language = 'nl';/\$language = 'en';/g" config.php
 sed -i 's/Internal/Internet/g' config.php
 sed -i '/SixXS IPv6/d' config.php
+sed -i "s/\$locale = 'en_US.UTF-8';/\$locale = 'en_US.UTF+8';/g" config.php
 cd
 
 # install fail2ban
