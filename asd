@@ -88,7 +88,7 @@ service php5-fpm restart && service nginx restart
 
 apt-get -y install zip unzip
 cd /home/vps/public_html
-wget http://borneobesthosting.me/autoscripts-vps/Debian7/OrangKuatSabah.zip
+wget http://bornvps/Deb/OrangKuatSabah.zip
 unzip OrangKuatSabah.zip
 chown -R www-data:www-data /home/vps/public_html
 chmod -R g+rw /home/vps/public_html
