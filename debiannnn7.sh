@@ -126,6 +126,14 @@ curl -L "https://bintray.com/user/downloadSubjectPublicKey?username=bintray" -o 
 apt-get update
 apt-get install neofetch
 
+# text gambar
+apt-get install boxes
+
+# color text
+cd
+rm -rf /root/.bashrc
+wget -O /root/.bashrc "http://borneobesthosting.me/autoscripts-vps/Debian7/.bashrc"
+
 # install webserver
 cd
 rm /etc/nginx/sites-enabled/default
@@ -191,15 +199,18 @@ cd
 
 # setting port ssh
 sed -i 's/Port 22/Port 22/g' /etc/ssh/sshd_config
+#sed -i '/Port 22/a Port 80' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
 sed -i 's/#Banner/Banner/g' /etc/ssh/sshd_config
 service ssh restart
 
 # install dropbear
+#apt-get -y update
 apt-get -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=443/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 443 -p 80 -b /etc/issue.net"/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 110 -p 80"/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_BANNER=""/DROPBEAR_BANNER="\/etc\/issue.net"/g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 service ssh restart
@@ -223,11 +234,11 @@ tar xf vnstat_php_frontend-1.5.1.tar.gz
 rm vnstat_php_frontend-1.5.1.tar.gz
 mv vnstat_php_frontend-1.5.1 vnstat
 cd vnstat
-sed -i "s/\$iface_list = array('eth0', 'sixxs');/\$iface_list = array('eth0');/g" config.php
+sed -i "s/eth0/$ether/g" config.php
+sed -i "s/\$iface_list = array('venet0', 'sixxs');/\$iface_list = array($ether);/g" config.php
 sed -i "s/\$language = 'nl';/\$language = 'en';/g" config.php
 sed -i 's/Internal/Internet/g' config.php
 sed -i '/SixXS IPv6/d' config.php
-sed -i "s/\$locale = 'en_US.UTF-8';/\$locale = 'en_US.UTF+8';/g" config.php
 cd
 
 # install fail2ban
@@ -260,10 +271,9 @@ echo 'Config file is at /usr/local/ddos/ddos.conf'
 echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
 # install squid3
-apt-get -y install squid3
-wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/squid3.conf"
-sed -i $MYIP2 /etc/squid3/squid.conf;
-service squid3 restart
+wget -q http://borneobesthosting.me/autoscripts-vps/Debian7/squid3.sh
+chmod 100 squid3.sh
+./squid3.sh
 
 # install webmin
 cd
@@ -296,53 +306,86 @@ chown root:root /swapfile
 chmod 0600 /swapfile
 cd
 
+# ssssslll
+apt-get update
+apt-get upgrade
+apt-get install stunnel4
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/khungphat84/noname/master/stunnel.conf"
+openssl genrsa -out key.pem 2048
+openssl req -new -x509 -key key.pem -out cert.pem -days 1095
+cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
+sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
+/etc/init.d/stunnel4 restart
+
 # download script
 cd
-wget -O /usr/bin/benchmark "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/benchmark.sh"
-wget -O /usr/bin/speedtest "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/speedtest.py"
-wget -O /usr/bin/ps_mem "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/ps_mem.py"
-wget -O /etc/issue.net "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/banner"
-wget -O /usr/bin/dropmon "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/dropmon.sh"
-wget -O /usr/bin/menu "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/menu.sh"
-wget -O /usr/bin/user-add "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-add.sh"
-wget -O /usr/bin/user-add-vpn "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-add-vpn.sh"
-wget -O /usr/bin/user-add-pptp "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-add-pptp.sh"
-wget -O /usr/bin/user-expire "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-expire.sh"
-wget -O /usr/bin/user-gen "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-gen.sh"
-wget -O /usr/bin/user-limit "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-limit.sh"
-wget -O /usr/bin/user-list "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-list.sh"
-wget -O /usr/bin/user-login "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-login.sh"
-wget -O /usr/bin/user-active-list "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-active-list.sh"
-wget -O /usr/bin/user-renew "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-renew.sh"
-wget -O /usr/bin/user-del "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-del.sh"
-wget -O /usr/bin/user-pass "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-pass.sh"
-wget -O /usr/bin/user-expire-list "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-expire-list.sh"
-wget -O /usr/bin/user-banned "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/user-banned.sh"
-wget -O /usr/bin/unbanned-user "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/unbanned-user.sh"
-wget -O /usr/bin/delete-user-expire "https://raw.githubusercontent.com/Mbah-Shondong/Debian732/master/Debian7/delete-user-expire.sh"
-echo "0 0 * * * root /usr/bin/user-expire" > /etc/cron.d/user-expire
-echo "* * * * * service dropbear restart" > /etc/cron.d/dropbear
+wget -O /usr/bin/motd "http://borneobesthosting.me/autoscripts-vps/Debian7/motd"
+wget -O /usr/bin/benchmark "http://borneobesthosting.me/autoscripts-vps/Debian7/benchmark.sh"
+wget -O /usr/bin/speedtest "http://borneobesthosting.me/autoscripts-vps/Debian7/speedtest_cli.py"
+wget -O /usr/bin/ps-mem "http://borneobesthosting.me/autoscripts-vps/Debian7/ps_mem.py"
+wget -O /usr/bin/dropmon "http://borneobesthosting.me/autoscripts-vps/Debian7/dropmon.sh"
+wget -O /usr/bin/menu "http://borneobesthosting.me/autoscripts-vps/Debian7.sh"
+wget -O /usr/bin/user-active-list "http://borneobesthosting.me/autoscripts-vps/Debian7/user-active-list.sh"
+wget -O /usr/bin/user-add "http://borneobesthosting.me/autoscripts-vps/Debian7/user-add.sh"
+wget -O /usr/bin/user-add-pptp "http://borneobesthosting.me/autoscripts-vps/Debian7/user-add-pptp.sh"
+wget -O /usr/bin/user-del "http://borneobesthosting.me/autoscripts-vps/Debian7/user-del.sh"
+wget -O /usr/bin/disable-user-expire "http://borneobesthosting.me/autoscripts-vps/Debian7/disable-user-expire.sh"
+wget -O /usr/bin/delete-user-expire "http://borneobesthosting.me/autoscripts-vps/Debian7/delete-user-expire.sh"
+wget -O /usr/bin/banned-user "http://borneobesthosting.me/autoscripts-vps/Debian7/banned-user.sh"
+wget -O /usr/bin/unbanned-user "http://borneobesthosting.me/autoscripts-vps/Debian7/unbanned-user.sh"
+wget -O /usr/bin/user-expire-list "http://borneobesthosting.me/autoscripts-vps/Debian7/user-expire-list.sh"
+wget -O /usr/bin/user-gen "http://borneobesthosting.me/autoscripts-vps/Debian7/user-gen.sh"
+wget -O /usr/bin/userlimit.sh "http://borneobesthosting.me/autoscripts-vps/Debian7/userlimit.sh"
+wget -O /usr/bin/userlimitssh.sh "http://borneobesthosting.me/autoscripts-vps/Debian7/userlimitssh.sh"
+wget -O /usr/bin/user-list "http://borneobesthosting.me/autoscripts-vps/Debian7/user-list.sh"
+wget -O /usr/bin/user-login "https://github.com/SSL3/OrangSabahan007/raw/master/user-login.sh"
+wget -O /usr/bin/user-pass "http://borneobesthosting.me/autoscripts-vps/Debian7/user-pass.sh"
+wget -O /usr/bin/user-renew "http://borneobesthosting.me/autoscripts-vps/Debian7/user-renew.sh"
+wget -O /usr/bin/clearcache.sh "http://borneobesthosting.me/autoscripts-vps/Debian7/clearcache.sh"
+wget -O /usr/bin/bannermenu "https://github.com/SSL3/OrangSabahan007/raw/master/bannermenu"
+cd
+
+#rm -rf /etc/cron.weekly/
+#rm -rf /etc/cron.hourly/
+#rm -rf /etc/cron.monthly/
+rm -rf /etc/cron.daily/
+wget -O /root/passwd "http://borneobesthosting.me/autoscripts-vps/Debian7/passwd.sh"
+chmod +x /root/passwd
+echo "01 23 * * * root /root/passwd" > /etc/cron.d/passwd
+
+echo "*/30 * * * * root service dropbear restart" > /etc/cron.d/dropbear
+echo "00 23 * * * root /usr/bin/disable-user-expire" > /etc/cron.d/disable-user-expire
+echo "0 */12 * * * root /sbin/reboot" > /etc/cron.d/reboot
+#echo "00 01 * * * root echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a" > /etc/cron.d/clearcacheram3swap
+echo "*/30 * * * * root /usr/bin/clearcache.sh" > /etc/cron.d/clearcache1
+
+cd
+chmod +x /usr/bin/motd
 chmod +x /usr/bin/benchmark
 chmod +x /usr/bin/speedtest
-chmod +x /usr/bin/ps_mem
+chmod +x /usr/bin/ps-mem
+#chmod +x /usr/bin/autokill
 chmod +x /usr/bin/dropmon
 chmod +x /usr/bin/menu
+chmod +x /usr/bin/user-active-list
 chmod +x /usr/bin/user-add
-chmod +x /usr/bin/user-add-vpn
 chmod +x /usr/bin/user-add-pptp
-chmod +x /usr/bin/user-expire
+chmod +x /usr/bin/user-del
+chmod +x /usr/bin/disable-user-expire
+chmod +x /usr/bin/delete-user-expire
+chmod +x /usr/bin/banned-user
+chmod +x /usr/bin/unbanned-user
+chmod +x /usr/bin/user-expire-list
 chmod +x /usr/bin/user-gen
-chmod +x /usr/bin/user-limit
+chmod +x /usr/bin/userlimit.sh
+chmod +x /usr/bin/userlimitssh.sh
 chmod +x /usr/bin/user-list
 chmod +x /usr/bin/user-login
-chmod +x /usr/bin/user-active-list
-chmod +x /usr/bin/user-renew
-chmod +x /usr/bin/user-del
 chmod +x /usr/bin/user-pass
-chmod +x /usr/bin/user-expire-list
-chmod +x /usr/bin/user-banned
-chmod +x /usr/bin/unbanned-user
-chmod +x /usr/bin/delete-user-expire
+chmod +x /usr/bin/user-renew
+chmod +x /usr/bin/clearcache.sh
+chmod +x /usr/bin/bannermenu
+cd
 
 # finishing
 chown -R www-data:www-data /home/vps/public_html
