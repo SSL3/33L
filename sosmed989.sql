@@ -3986,7 +3986,8 @@ CREATE TABLE `provider` (
 
 INSERT INTO `provider` (`id`, `code`, `link`, `api_key`) VALUES
 (1, 'MANUAL', '', ''),
-(2, 'SOSMED989', 'https://sosmed989.net/api.php', 'ydmXoDbwzFnmTSB6OFkO');
+(2, 'IRVANKEDE', 'http://borneovpshosting.me/api.php', '2VqHz-MkIRJ-0fIFN');
+(3, 'JAP', 'http://borneovpshosting.me/api.php', 'ydmXoDbwzFnmTSB6OFkO');
 
 -- --------------------------------------------------------
 
@@ -4356,7 +4357,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `balance`, `level`, `registered`, `status`, `email`, `api_key`, `uplink`, `verif_code`) VALUES
-(1, 'Aben_moon', 'Admin123', 97828.7, 'Developers', '2018-04-01', 'Active', '', '', 'server', ''),
+(1, 'Brothervpn420', 'Admin123', 978, 'Developers', '2018-04-01', 'Active', '', '', 'server', ''),
 (250, 'syamimie93', 'syamimie93', 4, 'Member', '2018-04-09', 'Active', '', 'L7UpvomoFH9w0rkkUUeo', 'Aben_moon', ''),
 (251, 'irwandgr8', 'i1818284', 63.47199999999999, 'Member', '2018-04-09', 'Active', '', 'ncCdsbt5jIqNGA8ciSvq', 'Aben_moon', ''),
 (252, 'cinakkabr', 'sa230116', 9.750999999999998, 'Member', '2018-04-09', 'Active', '', 'M0dfa4b9wbRZ0Rk6aYlh', 'Aben_moon', ''),
